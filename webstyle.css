@@ -1,0 +1,44 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: url(clark-young-ueZXMrZFFKQ-unsplash.jpg);
+	background-size: cover;
+	font-family: sans-serif;
+}
+
+.login{
+	width: 320px;
+	height: 320px;
+	background: #000;
+	top: 20%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%,-50%);
+	box-sizing: border-box;
+	padding: 30px 30px;
+	margin-top: 10rem;
+}
+.login .pizza{
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+	height: 100%;
+}
+
+.pizza div{
+	display: flex;
+	justify-content: space-between;
+}
+
+.login label{
+	color: white;
+}
+
+.login h1{
+	color: white;
+	text-align: center;	
+}
+
+.login button{
+	margin-top: auto;
+}
