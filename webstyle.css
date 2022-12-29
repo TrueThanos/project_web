@@ -5,6 +5,10 @@ body{
 	background-size: cover;
 	font-family: sans-serif;
 }
+.admin_button{
+	padding: 1rem;
+	color: white;
+}
 
 .login{
 	width: 320px;
