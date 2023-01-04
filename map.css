@@ -5,3 +5,10 @@
 	padding: 1rem;
 	width: 20rem;
 }
+
+#product-filter{	
+	margin: 1rem;
+	padding: 1rem;
+	width: 20rem;
+	left: 50%;
+}

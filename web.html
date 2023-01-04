@@ -7,19 +7,19 @@
 <body>
 	<a class="admin_button" href="./administrator.php">admin</a>
 	<div class="login">
-		<form class="pizza" action="web.php" method="get"> 
+		<form class="pizza" action="web.php" method="post"> 
 			<h1>LOG IN</h1>
 			<div>
 				<label>Name</label>
-				<input name="nm" placeholder="Enter name here">	
+				<input name="name" placeholder="Enter name here">	
 			</div>
 			<div>			
 				<label>Password</label>
-				<input password="pass" placeholder="Enter password here">
+				<input type="password" name="password" placeholder="Enter password here">
 			</div>
 			<div>
 				<label>Email</label>
-				<input email="eml" placeholder="Enter email here">
+				<input type="email" name="email" placeholder="Enter email here">
 			</div>
 			<button type="submit">LOG IN</button>
 		</form>
