@@ -1,0 +1,12 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: url(tamanna-rumee-hGLc8L-EcCM-unsplash.jpg);
+	background-size: cover;
+	font-family: sans-serif;
+}
+
+.container{
+    padding: 1rem;
+	color: white;
+}
