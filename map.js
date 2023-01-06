@@ -29,16 +29,28 @@ console.info('sales are', sales);
 
 
 var featuresLayer;
-function addFeatures(currentFilter='') {
-	////////////populate map with GeoJSON feature layer
+function addFeatures(currentFilter='', selected_category) {
+	// populate map with GeoJSON feature layer
 	featuresLayer = new L.GeoJSON(data, {
+	  filter: function(feature, layer) {
+		const salesforsupermarket = sales.filter(function(salesitem) {
+			return salesitem.super_market_id == feature.properties["@id"];
+		});
+
+		const salesincategory = salesforsupermarket.filter(function(salesitem) {
+			return salesitem.category_id == selected_category;
+		});
+		console.info({ selected_category });
+		return selected_category == "" || salesincategory.length > 0;
+	  },
 	  onEachFeature: function (feature, marker) {
 		const salesforsupermarket = sales.filter(function(salesitem) {
 			return salesitem.super_market_id == feature.properties["@id"];
 		});
+
 		let saleshtml = "";
 
-		salesforsupermarket.forEach(sale=> saleshtml += ("<li>" + "id: " + sale.product_id + " price: " + sale.price + " " + sale.date + " likes: " + sale.like + " dislikes: " + sale.dislike + " " + "</li>"));
+		salesforsupermarket.forEach(sale=> saleshtml += ("<li>" + "id: " + sale.product_id + " price: " + sale.price + " " + sale.date + " likes: " + sale.likes + " dislikes: " + sale.dislikes + " " + "<a class='review_button' href='./review.php?sale_id=" + sale["sale_id"] + "'>Review</a>" + "</li>"));
 
 		marker.bindPopup(
 			"<div>" +
@@ -52,8 +64,7 @@ function addFeatures(currentFilter='') {
 	featuresLayer.addTo(mymap);
 }
 
-addFeatures();
-
+addFeatures('', selected_category);
 
 function showPopups(currentFilter='') {
 	mymap.removeLayer(featuresLayer);

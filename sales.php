@@ -1,4 +1,3 @@
-<?php error_reporting(0); ?> 
 <?php
     $mysqli = new mysqli("localhost","root","","customer");
 
@@ -13,8 +12,12 @@
         $price = $_POST['price'];
         $super_market_id = $_GET['super_market_id'];
         $current_date = date('Y-m-d H:i:s');
-        $res = $mysqli -> query("INSERT INTO sales VALUES ('$product_id','$super_market_id','$current_date',true,'$price', 0 , 0 )");
-        $res->fetch_assoc();
+
+        $result = $mysqli->query("SELECT * FROM products WHERE id=$product_id");
+        $row = $result->fetch_assoc(); 
+        $category_id = $row['category']; 
+
+        $res = $mysqli -> query("INSERT INTO sales (product_id, super_market_id, date, stock, price, likes, dislikes, category_id) VALUES ('$product_id','$super_market_id', '$current_date', 1, '$price', 0 , 0, '$category_id')");
     }  
 
 ?>
@@ -22,9 +25,7 @@
 <head>
 <title>Sales</title>
     <link rel="stylesheet" href="sales.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
 </head>	
 <body>
 <div class="container">
