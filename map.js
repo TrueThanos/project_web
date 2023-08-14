@@ -1,5 +1,5 @@
 import {data} from './data.js';
-
+//
 const inputElement = document.querySelector("#name-filter");
 
 let mymap = L.map("mapid", {
@@ -26,21 +26,25 @@ mymap.addLayer(
 
 
 console.info('sales are', sales);
-
+// we transform the string sales to an object
+sales = JSON.parse(sales);
 
 var featuresLayer;
 function addFeatures(currentFilter='', selected_category) {
 	// populate map with GeoJSON feature layer
 	featuresLayer = new L.GeoJSON(data, {
 	  filter: function(feature, layer) {
-		const salesforsupermarket = sales.filter(function(salesitem) {
+		// we filter some of the data to not be shown
+		function checksalesinsupermarket(salesitem) {
 			return salesitem.super_market_id == feature.properties["@id"];
-		});
-
-		const salesincategory = salesforsupermarket.filter(function(salesitem) {
+		}		
+		function checksaleincategory(salesitem) {
 			return salesitem.category_id == selected_category;
-		});
-		console.info({ selected_category });
+		}
+		const salesforsupermarket = sales.filter(checksalesinsupermarket);
+		const salesincategory = salesforsupermarket.filter(checksaleincategory);
+
+		// if no selected category show all markers or user selected a category then show only if category length > 0
 		return selected_category == "" || salesincategory.length > 0;
 	  },
 	  onEachFeature: function (feature, marker) {
@@ -64,6 +68,7 @@ function addFeatures(currentFilter='', selected_category) {
 	featuresLayer.addTo(mymap);
 }
 
+// 
 addFeatures('', selected_category);
 
 function showPopups(currentFilter='') {
@@ -71,7 +76,7 @@ function showPopups(currentFilter='') {
 	featuresLayer = new L.GeoJSON(data, {
 		onEachFeature: function (feature, marker) {
 			marker.bindPopup("<h4>" + feature.properties.name + "</h4>").addTo(mymap);
-			if (feature.properties.name.startsWith(currentFilter)) {
+			if (feature.properties.name.includes(currentFilter)) {
 				console.info('Showing popup for', feature.properties.name)
 				marker.openPopup();
 			}
@@ -79,7 +84,7 @@ function showPopups(currentFilter='') {
 	});
 }
 
-// input event gets called when user writes on input box
+// input event gets called when user writes on input(super markets filter by name) box 
 inputElement.addEventListener('input', updateValue);
 
 function updateValue(e) {	

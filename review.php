@@ -7,14 +7,52 @@
         exit();
     }
 
+    $sale_id = $_REQUEST['sale_id'];
+    $id=intval($sale_id);
+    $result = $mysqli-> query("SELECT * FROM sales WHERE sale_id = '".$id."'");
 
-    $sale_id = $_GET['sale_id'];
-    $result = $mysqli->query("SELECT * FROM sales WHERE sale_id=$sale_id");
+    if (!$result) {
+        echo("Error description: " . $mysqli -> error);
+    }          
 
     $row = $result->fetch_assoc();
+    if (isset($_POST['action'])) {
+        
+        $new_likes = intval($row['likes']) + 1;
+        $res = $mysqli -> query("UPDATE sales SET likes=$new_likes WHERE sale_id=$sale_id");
+    } 
 ?>
 <html>
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    
+
+    <i onclick="togglelike(this)" class="fa fa-thumbs-up"></i>
+
+    <script>
+    function togglelike(x) {
+        x.classList.toggle("fa-thumbs-down");
+
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            error: function(errMsg) {
+                console.info(errMsg);
+            },
+            type: "POST",
+            url: "review.php",
+            data: JSON.stringify({ action: 'like', sale_id: '<?php echo($sale_id)?>'}),
+            success: function (result) {
+                console.log(result);
+            },
+            dataType: "json"
+        });
+        
+    } 
+    </script>
+
+
+
     <title>Product Review</title>
     <div class='container'>
         <h2>Sale ID <?php echo $row["sale_id"]; ?></h2>

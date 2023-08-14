@@ -7,6 +7,7 @@
         exit();
     }
 
+    // if we are in post request and we passed through url the product id then 
     if (isset($_POST['product_id'])) {
         $product_id = $_POST['product_id'];
         $price = $_POST['price'];

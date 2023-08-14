@@ -8,13 +8,14 @@
         exit();
     }
 
+    // if post request has data 'remove_product' then do
     if (isset($_POST['remove_product'])) {
         $id = $_POST['remove_product'];
         // Perform query
         $mysqli -> query("DELETE FROM products WHERE id=$id");
     }
 
-    // Read json file of products
+    // Read json file of products 
     $products_json = file_get_contents('products_prices.json');
     $products_decoded_json = json_decode($products_json, true);
 
