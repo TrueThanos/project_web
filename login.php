@@ -26,7 +26,7 @@ if (isset($_POST['name']) && isset($_POST['password']) && isset($_POST['email'])
 $found_user = false;
 $errors = array();
 
-if (isset($_POST['type']) && $_POST['type'] == 'login') {
+if (isset($_POST['login'])) {
 
 	$found_user = false;
 	foreach($users as $row) {
@@ -35,12 +35,11 @@ if (isset($_POST['type']) && $_POST['type'] == 'login') {
 			break;
 		}
 	}
-	echo $found_user;
-	echo $_SESSION['password'];
-	echo $_SESSION['email'];
-	echo $_SESSION['name'];
+    if (!$found_user) {
+        $errors[] = 'user with the inserted username or password does not exist';
+    }
 
-} else if (isset($_POST['type']) && $_POST['type'] == 'signup') {
+} else if (isset($_POST['signup'])) {
 	$name = $_POST['name'];
 	$password = $_POST['password'];
 	$email = $_POST['email'];
@@ -65,11 +64,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'login') {
 		$errors[] = "Password should contain at least one special character";
 	}
 	
-	if ($errors) {
-		foreach ($errors as $error) {
-			echo $error . "\n";
-		}
-	} else {
+	if (!$errors) {
 		echo "$pass => MATCH\n";
 	}
 
@@ -77,7 +72,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'login') {
 		$found_user = true;
 		$res = $mysqli -> query("INSERT INTO customer (name, password, email) VALUES ('$name','$password', '$email')");
 	} else {
-		echo('user with same username or password already exists');
+		$errors[] = 'user with same username or password already exists';
 	}
 
 }
@@ -85,8 +80,44 @@ if (isset($_POST['type']) && $_POST['type'] == 'login') {
 // allow login in map only if the values exist in database
 if ($found_user == true && !$errors) {
 	header("Location: http://localhost/project_web/map.php");
+    exit();
 }
-else {
-	echo "Login Failed";
-}
+?>
+<html>
+<head>
+<title>project 22-23</title>
+	<link rel="stylesheet" href="webstyle.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>	
+<body>
+	<a class="admin_button" href="./administrator.php">admin</a>
+	<div class="login">
+		<form class="pizza" method="post"> 
+			<h1>LOG IN</h1>
+			<div>
+				<label>Name</label>
+				<input name="name" placeholder="Enter name here">	
+			</div>
+			<div>			
+				<label>Password</label>
+				<input type="password" name="password" placeholder="Enter password here">
+			</div>
+			<div>
+				<label>Email</label>
+				<input type="email" name="email" placeholder="Enter email here">
+			</div>
+            <?php
+					//
+					foreach($errors as $error)
+					{
+						echo "<div class='error'>" . $error . "</div>";
+					}
+					?>
+			<button type="submit" value="login" name="login">LOG IN</button>
+			<button type="submit" value="signup" name="signup">SIGN UP</button>
+		</form>
+	</div>		
+</body>
+<html>
+<?php
 ?>
