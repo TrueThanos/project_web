@@ -17,9 +17,13 @@
 
     $row = $result->fetch_assoc();
     if (isset($_POST['action'])) {
-        
-        $new_likes = intval($row['likes']) + 1;
-        $res = $mysqli -> query("UPDATE sales SET likes=$new_likes WHERE sale_id=$sale_id");
+        if ($_POST['action'] == 'like') {
+            $new_likes = intval($row['likes']) + 1;
+            $res = $mysqli -> query("UPDATE sales SET likes=$new_likes WHERE sale_id=$sale_id");
+        } else {
+            $new_dislikes = intval($row['dislikes']) + 1;
+            $res = $mysqli -> query("UPDATE sales SET dislikes=$new_dislikes WHERE sale_id=$sale_id");
+        }
     } 
 ?>
 <html>
@@ -28,24 +32,36 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
     
 
-    <i onclick="togglelike(this)" class="fa fa-thumbs-up"></i>
+    <i onclick="clicklike(this)" class="fa fa-thumbs-up"></i>
+    <i onclick="clickdislike(this)" class="fa fa-thumbs-down"></i>
+
 
     <script>
-    function togglelike(x) {
-        x.classList.toggle("fa-thumbs-down");
-
+    function clicklike(x) {
         $.ajax({
-            contentType: "application/json; charset=utf-8",
             error: function(errMsg) {
                 console.info(errMsg);
             },
             type: "POST",
             url: "review.php",
-            data: JSON.stringify({ action: 'like', sale_id: '<?php echo($sale_id)?>'}),
+            data: { action: "like", sale_id: '<?php echo($sale_id)?>'},
             success: function (result) {
-                console.log(result);
+                // console.log(result);
             },
-            dataType: "json"
+        });
+        
+    } 
+    function clickdislike(x) {
+        $.ajax({
+            error: function(errMsg) {
+                console.info(errMsg);
+            },
+            type: "POST",
+            url: "review.php",
+            data: { action: "dislike", sale_id: '<?php echo($sale_id)?>'},
+            success: function (result) {
+                // console.log(result);
+            },
         });
         
     } 
