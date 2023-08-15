@@ -35,15 +35,42 @@
     }
 
     $new_reviewers = $reviewers . "," .$email;
+    $likes = $row['likes'];
+    $dislikes = $row['dislikes'];
+    $date = date("Y-01-m");
+    echo 'Review date: '.date("F Y",strtotime($date));
 
-    if (isset($_POST['action']) && !$user_reviewed_already) {
-        echo 'test';
+    if (isset($_POST['action']) && !$user_reviewed_already) {        
+        // Find user that submitted the review
+        $users = $mysqli -> query("SELECT * FROM customer WHERE email = '".$email."'");
+        $user = $users->fetch_assoc();
+
+        // Find tokens entry for this month
+        $tokens = $mysqli -> query("SELECT * FROM customer_tokens WHERE email = '".$email."' AND date = '".$date."'");
+        $token = $tokens->fetch_assoc();
+        if (!$token) {
+            $new_month_tokens = 0;
+        } else {
+            $new_month_tokens = intval($token['tokens']);
+        }
+
         if ($_POST['action'] == 'like') {
-            $new_likes = intval($row['likes']) + 1;
-            $res = $mysqli -> query("UPDATE sales SET likes=$new_likes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
+            $new_tokens = intval($user['tokens']) + 5;
+            $new_month_tokens = $new_month_tokens + 5;
+            $likes = intval($likes) + 1;
+            $res = $mysqli -> query("UPDATE sales SET likes=$likes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
         } else if ($_POST['action' == 'dislike']) {
-            $new_dislikes = intval($row['dislikes']) + 1;
-            $res = $mysqli -> query("UPDATE sales SET dislikes=$new_dislikes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
+            $new_tokens = min(0, intval($user['tokens']) -  1);
+            $new_month_tokens = $new_month_tokens - 1;
+            $dislikes = intval($dislikes) + 1;
+            $res = $mysqli -> query("UPDATE sales SET dislikes=$dislikes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
+        }
+        $res_user_update = $mysqli -> query("UPDATE customer SET tokens=$new_tokens WHERE email='".$email."'");
+        if ($token) {
+            $res_token_update = $mysqli -> query("UPDATE customer_tokens SET tokens=$new_month_tokens WHERE email = '".$email."' AND date = '".$date."'");
+        } else {
+            $res_token_update = $mysqli -> query("INSERT INTO customer_tokens (tokens, date, email) VALUES ('$new_month_tokens','$date', '$email')");
+
         }
     } 
 ?>
@@ -107,12 +134,12 @@
         <br>
 
         <label>Likes</label>
-        <span><?php echo $row["likes"]; ?></span>
+        <span><?php echo $likes; ?></span>
 
         <br>
 
         <label>Dislikes</label>
-        <span><?php echo $row["dislikes"]; ?></span>
+        <span><?php echo $dislikes; ?></span>
     </div>
 </head>	
 <body>
