@@ -88,5 +88,11 @@
             <input type="submit" value="Add the product" />
         </form>
     </div>
+    <div class="container">
+        <h1>Distribute points for current month</h1> 
+        <form method="POST" action="distribute-tokens.php">
+            <input type="submit" value="Distribute" />
+        </form>
+    </div>
 </body>
 <html>

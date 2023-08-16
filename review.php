@@ -41,35 +41,28 @@
     echo 'Review date: '.date("F Y",strtotime($date));
 
     if (isset($_POST['action']) && !$user_reviewed_already) {        
-        // Find user that submitted the review
-        $users = $mysqli -> query("SELECT * FROM customer WHERE email = '".$email."'");
-        $user = $users->fetch_assoc();
-
-        // Find tokens entry for this month
-        $tokens = $mysqli -> query("SELECT * FROM customer_tokens WHERE email = '".$email."' AND date = '".$date."'");
-        $token = $tokens->fetch_assoc();
-        if (!$token) {
-            $new_month_tokens = 0;
+        // Find points entry for this month
+        $points = $mysqli -> query("SELECT * FROM customer_points WHERE email = '".$email."' AND date = '".$date."'");
+        $point = $points->fetch_assoc();
+        if (!$point) {
+            $new_month_points = 0;
         } else {
-            $new_month_tokens = intval($token['tokens']);
+            $new_month_points = intval($point['points']);
         }
 
         if ($_POST['action'] == 'like') {
-            $new_tokens = intval($user['tokens']) + 5;
-            $new_month_tokens = $new_month_tokens + 5;
+            $new_month_points = $new_month_points + 5;
             $likes = intval($likes) + 1;
             $res = $mysqli -> query("UPDATE sales SET likes=$likes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
         } else if ($_POST['action' == 'dislike']) {
-            $new_tokens = min(0, intval($user['tokens']) -  1);
-            $new_month_tokens = $new_month_tokens - 1;
+            $new_month_points = $new_month_points - 1;
             $dislikes = intval($dislikes) + 1;
             $res = $mysqli -> query("UPDATE sales SET dislikes=$dislikes,reviewers='$new_reviewers' WHERE sale_id=$sale_id");
         }
-        $res_user_update = $mysqli -> query("UPDATE customer SET tokens=$new_tokens WHERE email='".$email."'");
-        if ($token) {
-            $res_token_update = $mysqli -> query("UPDATE customer_tokens SET tokens=$new_month_tokens WHERE email = '".$email."' AND date = '".$date."'");
+        if ($point) {
+            $res_point_update = $mysqli -> query("UPDATE customer_points SET points=$new_month_points WHERE email = '".$email."' AND date = '".$date."'");
         } else {
-            $res_token_update = $mysqli -> query("INSERT INTO customer_tokens (tokens, date, email) VALUES ('$new_month_tokens','$date', '$email')");
+            $res_point_update = $mysqli -> query("INSERT INTO customer_points (points, date, email, tokens) VALUES ('$new_month_points','$date', '$email', '$tokens')");
 
         }
     } 
