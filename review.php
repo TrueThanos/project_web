@@ -38,7 +38,6 @@
     $likes = $row['likes'];
     $dislikes = $row['dislikes'];
     $date = date("Y-01-m");
-    echo 'Review date: '.date("F Y",strtotime($date));
 
     if (isset($_POST['action']) && !$user_reviewed_already) {        
         // Find points entry for this month
@@ -70,17 +69,10 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-    
-    <?php
-    if ($user_reviewed_already) echo "User reviewed already";
-    if (!$user_reviewed_already) echo "<i onclick='clicklike(this)' class='fa fa-thumbs-up '" .$extra_class . "></i>";
-    if (!$user_reviewed_already) echo "<i onclick='clickdislike(this)' class='fa fa-thumbs-down '" .$extra_class . "></i>";
-    ?>
-
     <script>
     function clicklike(x) {
-        console.info('test clicked like');
         $.ajax({
             error: function(errMsg) {
                 console.info(errMsg);
@@ -110,29 +102,42 @@
     } 
     </script>
 
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/project_web/map.php">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Review</li>
+    </ol>
+    </nav>
+    <div class="card">
+        <div class="card-body">
+            <?php
+            if ($user_reviewed_already) echo '<div class="alert alert-info" role="alert">User reviewed already</div>';
+            if (!$user_reviewed_already) echo "<i onclick='clicklike(this)' class='fa fa-thumbs-up '" .$extra_class . "></i>";
+            if (!$user_reviewed_already) echo "<i onclick='clickdislike(this)' class='fa fa-thumbs-down '" .$extra_class . "></i>";
+            ?>
+            
+            <h3 class="card-title">Product review</h5>
+            <h4 class="card-title">Sale ID <?php echo $row["sale_id"]; ?></h4>
 
+            <label>Product ID</label>
+            <span><?php echo $row["product_id"]; ?></span>
+            
+            <br>
 
-    <title>Product Review</title>
-    <div class='container'>
-        <h2>Sale ID <?php echo $row["sale_id"]; ?></h2>
+            <label>Super market ID</label>
+            <span><?php echo $row["super_market_id"]; ?></span>
 
-        <label>Product ID</label>
-        <span><?php echo $row["product_id"]; ?></span>
-        
-        <br>
+            <br>
 
-        <label>Super market ID</label>
-        <span><?php echo $row["super_market_id"]; ?></span>
+            <label>Total product likes</label>
+            <span><?php echo $likes; ?></span>
 
-        <br>
+            <br>
 
-        <label>Likes</label>
-        <span><?php echo $likes; ?></span>
-
-        <br>
-
-        <label>Dislikes</label>
-        <span><?php echo $dislikes; ?></span>
+            <label>Total product dislikes</label>
+            <span><?php echo $dislikes; ?></span>
+        </div>
+        </div>
     </div>
 </head>	
 <body>

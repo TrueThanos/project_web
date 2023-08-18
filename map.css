@@ -12,3 +12,11 @@
 	width: 20rem;
 	left: 50%;
 }
+
+.header {
+	width: 100%;
+	align-items: baseline;
+}
+.myprofile {
+	margin-left: auto;
+}

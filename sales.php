@@ -29,19 +29,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
 </head>	
 <body>
-<div class="container">
-    <h2>Add sale here</h2>
-    <form method="post">
-        <div class="mb-3">
-            <label for="product_id" class="form-label">Product ID</label>
-            <input type="text" class="form-control" id="product_id" name="product_id">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/project_web/map.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Sales</li>
+        </ol>
+    </nav>
+    
+    
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Add sale here</h3>
+            <form method="post">
+                <div class="mb-3">
+                    <label for="product_id" class="form-label">Product ID</label>
+                    <input type="text" class="form-control" id="product_id" name="product_id">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" class="form-control" id="price" name="price">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input type="text" class="form-control" id="price" name="price">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+    </div>
 </body>
 </html>

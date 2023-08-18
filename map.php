@@ -33,26 +33,36 @@
 		<link rel="stylesheet" href="map.css">
 		
 		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
-
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	</head>	
 	<body>
 		<div class='mp'>
-			<input type='text' id='name-filter' class="filter" placeholder="Super markets filter by name">
-			</input>
-			<form  action="map.php" method="post" >
-				<select onchange="this.form.submit()" name="category">
-					<option value=''>Select Category</option>
-					<?php
-					//
-					foreach($categories_ar as $row)
-					{
-						$selected = ($selected_category ==  $row['id']) ? 'selected' : '';
-						// print option with attribute selected if is chosen else print it without attribute selected
-						echo "<option " .$selected. " value=" . $row['id'] . ">" . $row['name'] . "</option>";
-					}
-					?>
-				</select>
-			</form>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav header">
+						<li class="nav-item">
+							<input type='text' id='name-filter' class="filter form-control" placeholder="Super markets filter by name" />
+						</li>
+						<form class="form-inline" action="map.php" method="post" >
+							<select  class="form-control custom-select" onchange="this.form.submit()" name="category">
+								<option value=''>Select Category</option>
+								<?php
+								//
+								foreach($categories_ar as $row)
+								{
+									$selected = ($selected_category ==  $row['id']) ? 'selected' : '';
+									// print option with attribute selected if is chosen else print it without attribute selected
+									echo "<option " .$selected. " value=" . $row['id'] . ">" . $row['name'] . "</option>";
+								}
+								?>
+							</select>
+						</form>
+						<li class="nav-item myprofile">
+							<a class="nav-link" href="/project_web/myprofile.php">My profile</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
 			<div id="mapid"></div> 
 		</div>
 		<script type='text/javascript'>
